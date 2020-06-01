@@ -1,0 +1,25 @@
+#!/bin/sh
+
+script_dir=$(dirname $0)
+hook_name=$(basename $0)
+hook_dir="${script_dir}/${hook_name}.d"
+
+if [ ! -d $hook_dir ]; then
+    echo "There is no pre-commit"
+    exit 0
+fi
+
+exit_code_sum=0
+for hook in $hook_dir/*; do
+    echo "$hook"
+    $hook
+    exit_code=$?
+    exit_code_sum=$(expr $exit_code_sum + $exit_code)
+done
+
+if [ ${exit_code_sum} -ne 0 ]; then
+    echo "Stopped commit process."
+    return 1
+fi
+
+return 0
