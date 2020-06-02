@@ -1,0 +1,4 @@
+let g:ale_cpp_clang_options = "-Wall -I".substitute(system('git rev-parse --show-toplevel'), '\n\+$', '', '')."/include"
+let g:ale_cpp_gcc_options = "-Wall -I".substitute(system('git rev-parse --show-toplevel'), '\n\+$', '', '')."/include"
+"let g:ale_cpp_clang_options = "-Wall -I/home/n_hachi/src/github.com/n-hachi/udp-messenger/include"
+"let g:ale_cpp_gcc_options = "-Wall -I/home/n_hachi/src/github.com/n-hachi/udp-messenger/include"
