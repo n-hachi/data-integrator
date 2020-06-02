@@ -1,9 +1,11 @@
 #include "data_integrator.hpp"
 
 #include <arpa/inet.h>
+#include <chrono>
+#include <iostream>
 #include <netinet/in.h>
 #include <sys/socket.h>
-#include <sys/types.h> /* See NOTES */
+#include <sys/types.h>
 
 namespace messenger {
 
@@ -27,5 +29,25 @@ DataIntegrator::DataIntegrator() {
   addr_B_.sin_port = htons(DataIntegrator::DEFAULT_PORT);
   addr_B_.sin_addr.s_addr = inet_addr(DataIntegrator::DEFAULT_IP);
 }
+
+void DataIntegrator::start() {
+  is_running_ = true;
+
+  send_th_ = std::thread([this] { SendThreadFunc(); });
+}
+
+void DataIntegrator::SendThreadFunc() {
+  int a = 0;
+  while (is_running_) {
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::cout << a << std::endl;
+    a++;
+  }
+  std::cout << "exit" << std::endl;
+}
+
+void DataIntegrator::shutdown() { is_running_ = false; }
+
+void DataIntegrator::join() { send_th_.join(); }
 
 } // namespace messenger

@@ -2,6 +2,7 @@
 #define UPD_MESSENGER_H
 
 #include <netinet/in.h>
+#include <thread>
 
 namespace messenger {
 
@@ -18,10 +19,19 @@ private:
   int sock_B_ = -1;
   struct sockaddr_in addr_B_;
 
+  std::thread send_th_;
+  std::thread recv_th_;
+  void SendThreadFunc();
+  void RecvThreadFunc();
+  volatile bool is_running_ = false;
+
 public:
   static int DEFAULT_PORT;
   static char DEFAULT_IP[];
   DataIntegrator();
+  void start();
+  void shutdown();
+  void join();
 };
 } // namespace messenger
 
